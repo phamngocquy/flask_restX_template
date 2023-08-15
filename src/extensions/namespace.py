@@ -9,12 +9,14 @@ from flask_restx.utils import merge, unpack
 
 from src.extensions.response_wrapper import wrap_response
 
-__author__ = 'ThucNC'
+__author__ = "QuyPN"
 _logger = logging.getLogger(__name__)
 
 
 class Namespace(OriginalNamespace):
-    def marshal_with(self, fields, as_list=False, code=HTTPStatus.OK, description=None, **kwargs):
+    def marshal_with(
+        self, fields, as_list=False, code=HTTPStatus.OK, description=None, **kwargs
+    ):
         """
         A decorator specifying the fields to use for serialization.
 
@@ -27,22 +29,31 @@ class Namespace(OriginalNamespace):
 
         def wrapper(func):
             doc = {
-                'responses': {
+                "responses": {
                     code: (description, [fields]) if as_list else (description, fields)
                 },
-                '__mask__': kwargs.get('mask', True),  # Mask values can't be determined outside app context
+                "__mask__": kwargs.get(
+                    "mask", True
+                ),  # Mask values can't be determined outside app context
             }
-            func.__apidoc__ = merge(getattr(func, '__apidoc__', {}), doc)
+            func.__apidoc__ = merge(getattr(func, "__apidoc__", {}), doc)
             return marshal_with(fields, ordered=self.ordered, **kwargs)(func)
 
         return wrapper
 
 
 class marshal_with(object):
-    """A decorator that apply marshalling to the return values of your methods.
-    """
+    """A decorator that apply marshalling to the return values of your methods."""
 
-    def __init__(self, fields, metadata=None, envelope=None, skip_none=False, mask=None, ordered=False):
+    def __init__(
+        self,
+        fields,
+        metadata=None,
+        envelope=None,
+        skip_none=False,
+        mask=None,
+        ordered=False,
+    ):
         """
         :param fields: a dict of whose keys will make up the final
                        serialized response output
@@ -62,9 +73,7 @@ class marshal_with(object):
             resp = f(*args, **kwargs)
             if isinstance(resp, tuple):
                 data, code, headers = unpack(resp)
-                return (
-                    self.wrap_response_with_data(data, code), code, headers
-                )
+                return (self.wrap_response_with_data(data, code), code, headers)
             else:
                 return self.wrap_response_with_data(resp)
 
@@ -73,12 +82,15 @@ class marshal_with(object):
     def wrap_response_with_data(self, resp, code=200):
         mask = self.mask
         if has_app_context():
-            mask_header = current_app.config['RESTPLUS_MASK_HEADER']
+            mask_header = current_app.config["RESTPLUS_MASK_HEADER"]
             mask = request.headers.get(mask_header) or mask
-        if isinstance(resp, dict) and all(k in resp for k in ['metadata', 'data']):
-            return wrap_response(marshal(resp['data'], self.fields, self.envelope, mask),
-                                 metadata=marshal(resp['metadata'], self.metadata),
-                                 http_code=code)
+        if isinstance(resp, dict) and all(k in resp for k in ["metadata", "data"]):
+            return wrap_response(
+                marshal(resp["data"], self.fields, self.envelope, mask),
+                metadata=marshal(resp["metadata"], self.metadata),
+                http_code=code,
+            )
         else:
-            return wrap_response(marshal(resp, self.fields, self.envelope, mask),
-                                 http_code=code)
+            return wrap_response(
+                marshal(resp, self.fields, self.envelope, mask), http_code=code
+            )

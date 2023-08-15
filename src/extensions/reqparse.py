@@ -22,7 +22,9 @@ class RequestParser(BaseRequestParser):
 
         # A record of arguments not yet parsed; as each is found
         # among self.args, it will be popped out
-        req.unparsed_arguments = dict(self.argument_class('').source(req)) if strict else {}
+        req.unparsed_arguments = (
+            dict(self.argument_class("").source(req)) if strict else {}
+        )
         errors = {}
         for arg in self.args:
             value, found = arg.parse(req, self.bundle_errors)
@@ -32,11 +34,11 @@ class RequestParser(BaseRequestParser):
             if found or arg.store_missing:
                 result[arg.dest or arg.name] = value
         if errors:
-            raise HTTPException(400, 'Input payload validation failed', errors)
+            raise HTTPException(400, "Input payload validation failed", errors)
 
         if strict and req.unparsed_arguments:
-            arguments = ', '.join(req.unparsed_arguments.keys())
-            msg = 'Unknown arguments: {0}'.format(arguments)
+            arguments = ", ".join(req.unparsed_arguments.keys())
+            msg = "Unknown arguments: {0}".format(arguments)
             raise BadRequest(msg)
 
         return result

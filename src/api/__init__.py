@@ -7,21 +7,21 @@ from src.extensions.exceptions import global_error_handler
 from .api_user import ns as user_ns
 from .api_hello import ns as hello_ns
 
-__author__ = 'ThucNC'
+__author__ = "QuyPN"
 _logger = logging.getLogger(__name__)
 
-api_bp = Blueprint('api', __name__, url_prefix=None)
+api_bp = Blueprint("api", __name__, url_prefix=None)
 
 api = Api(
     app=api_bp,
-    version='1.0',
-    title='Boilerplate API',
+    version="1.0",
+    title="Boilerplate API",
     validate=False,
     # doc='' # disable Swagger UI
 )
 
 api.add_namespace(user_ns)
-api.add_namespace(hello_ns, path='/hello')  # path default to namespace's name
+api.add_namespace(hello_ns, path="/hello")  # path default to namespace's name
 
 api.error_handlers[Exception] = global_error_handler
 

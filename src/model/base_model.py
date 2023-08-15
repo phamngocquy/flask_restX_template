@@ -22,8 +22,7 @@ class BaseModel(db.Model):
 
     @property
     def to_dict(self):
-        return {col.name: getattr(self, col.name) for col in
-                self.__table__.columns}
+        return {col.name: getattr(self, col.name) for col in self.__table__.columns}
 
     @classmethod
     def get(cls, _id, raise_not_found=False):

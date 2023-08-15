@@ -5,7 +5,7 @@ from flask_bcrypt import Bcrypt
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
-__author__ = 'ThucNC'
+__author__ = "QuyPN"
 _logger = logging.getLogger(__name__)
 
 db = SQLAlchemy()
@@ -26,4 +26,3 @@ def init_model(app, **kwargs):
 
 
 from src.model.user import User
-

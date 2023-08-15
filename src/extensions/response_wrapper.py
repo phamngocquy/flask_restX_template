@@ -1,12 +1,12 @@
 # coding=utf-8
 import logging
 
-__author__ = 'ThucNC'
+__author__ = "QuyPN"
 _logger = logging.getLogger(__name__)
 
 
 def wrap_response(data=None, message="", http_code=200, metadata=None):
-    """ Return general HTTP response
+    """Return general HTTP response
     :param data:
     :param metadata:
     :param str message: detail info
@@ -14,13 +14,13 @@ def wrap_response(data=None, message="", http_code=200, metadata=None):
     :return:
     """
     res = {
-        'code': http_code,
-        'success': http_code // 100 == 2,
-        'message': message,
+        "code": http_code,
+        "success": http_code // 100 == 2,
+        "message": message,
     }
 
     if data is not None:
-        res['data'] = data
+        res["data"] = data
     if metadata:
-        res['metadata'] = metadata
+        res["metadata"] = metadata
     return res

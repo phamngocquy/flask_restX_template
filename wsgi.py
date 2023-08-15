@@ -4,7 +4,7 @@ load_dotenv(find_dotenv())
 import logging
 from app import app as application
 
-__author__ = 'ThucNC'
+__author__ = 'QuyPN'
 _logger = logging.getLogger(__name__)
 
 if __name__ == "__main__":

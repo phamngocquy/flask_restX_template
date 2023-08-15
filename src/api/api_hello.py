@@ -7,13 +7,13 @@ from werkzeug.exceptions import Unauthorized
 from src.extensions.namespace import Namespace
 from src.extensions.response_wrapper import wrap_response
 
-__author__ = 'ThucNC'
+__author__ = "QuyPN"
 _logger = logging.getLogger(__name__)
 
-ns = Namespace('hello', description='Hello operations')
+ns = Namespace("hello", description="Hello operations")
 
 
-@ns.route('', methods=['GET'])
+@ns.route("", methods=["GET"])
 class HelloApi(Resource):
     """
     Hello world api
@@ -24,11 +24,11 @@ class HelloApi(Resource):
         Get hello message
         :return:
         """
-        _logger.info('Hello world API')
-        return wrap_response('Hello world', 'ok', 200)
+        _logger.info("Hello world API")
+        return wrap_response("Hello world", "ok", 200)
 
 
-@ns.route('/ex0', methods=['GET'])
+@ns.route("/ex0", methods=["GET"])
 class Exception0Api(Resource):
     """
     Exception api
@@ -42,7 +42,7 @@ class Exception0Api(Resource):
         1 / 0
 
 
-@ns.route('/ex1', methods=['GET'])
+@ns.route("/ex1", methods=["GET"])
 class Exception1Api(Resource):
     """
     Exception api
@@ -53,10 +53,10 @@ class Exception1Api(Resource):
         Raise ValueError exception
         :return:
         """
-        raise ValueError('Value error exception!')
+        raise ValueError("Value error exception!")
 
 
-@ns.route('/ex2', methods=['GET'])
+@ns.route("/ex2", methods=["GET"])
 class Exception2Api(Resource):
     """
     Exception api

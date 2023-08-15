@@ -2,9 +2,10 @@
 import logging
 
 from flask import Flask
+
 # from flask_debugtoolbar import DebugToolbarExtension
 
-__author__ = 'ThucNC'
+__author__ = "QuyPN"
 _logger = logging.getLogger(__name__)
 
 
@@ -17,7 +18,9 @@ def create_app(config_name):
 
     app = Flask(__name__)
     app.config.from_object(config.Config)
-    logging.config.fileConfig(app.config['LOGGING_CONFIG_FILE'], disable_existing_loggers=False)
+    logging.config.fileConfig(
+        app.config["LOGGING_CONFIG_FILE"], disable_existing_loggers=False
+    )
     _logger.info("Starting in `{}` mode...".format(config_name))
 
     init_api(app)

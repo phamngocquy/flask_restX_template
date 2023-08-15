@@ -16,17 +16,18 @@ class User(BaseModel):
     password_hash = db.Column(db.String(100))
     id_token = db.Column(db.String(512), nullable=True)
     image = db.Column(db.Text(), nullable=True)
-    role = db.Column(db.Enum('admin', 'moderator', 'viewer'),
-                     nullable=False, default='viewer')
+    role = db.Column(
+        db.Enum("admin", "moderator", "viewer"), nullable=False, default="viewer"
+    )
     last_login = db.Column(db.DateTime(), default=datetime.datetime.now)
 
     @property
     def password(self):
-        raise AttributeError('password: write-only field')
+        raise AttributeError("password: write-only field")
 
     @password.setter
     def password(self, password):
-        self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
+        self.password_hash = bcrypt.generate_password_hash(password).decode("utf-8")
 
     def check_password(self, password):
         return bcrypt.check_password_hash(self.password_hash, password)
@@ -51,10 +52,10 @@ class User(BaseModel):
     @staticmethod
     def update_user(username, data):
         user = db.session.query(User).filter(User.username == username).first_or_404()
-        if data['email'] != user.email:
-            conflict = User.query.filter(User.email == data['email']).first()
+        if data["email"] != user.email:
+            conflict = User.query.filter(User.email == data["email"]).first()
             if conflict:
-                raise Conflict('Email %s is existed' % data['email'])
+                raise Conflict("Email %s is existed" % data["email"])
         for key, value in data.items():
             setattr(user, key, value)
         db.session.flush()
@@ -62,10 +63,11 @@ class User(BaseModel):
 
     @staticmethod
     def delete_user(username):
-        user: User = db.session.query(User).filter(User.username == username).first_or_404()
+        user: User = (
+            db.session.query(User).filter(User.username == username).first_or_404()
+        )
         user.delete()
         db.session.flush()
-
 
     @staticmethod
     def find_by_username_or_email(username):
@@ -77,7 +79,9 @@ class User(BaseModel):
             user (User) - if there is a user with a specified username and
             password, None otherwise.
         """
-        user = User.query.filter(or_(User.username==username, User.email==username)).first_or_404()
+        user = User.query.filter(
+            or_(User.username == username, User.email == username)
+        ).first_or_404()
         return user
 
     @staticmethod
@@ -98,21 +102,25 @@ class User(BaseModel):
 
 class UserSchema:
     user = {
-        'id': fields.Integer(required=True, description='user _id'),
-        'email': fields.String(required=True, description='user email address'),
-        'username': fields.String(required=True, description='user username'),
-        'fullname': fields.String(required=False, description='user full name'),
-        'image': fields.String(required=False, description='user avatar'),
-        'role': fields.String(required=False, description='user role (admin | moderator | viewer)'),
+        "id": fields.Integer(required=True, description="user _id"),
+        "email": fields.String(required=True, description="user email address"),
+        "username": fields.String(required=True, description="user username"),
+        "fullname": fields.String(required=False, description="user full name"),
+        "image": fields.String(required=False, description="user avatar"),
+        "role": fields.String(
+            required=False, description="user role (admin | moderator | viewer)"
+        ),
         # 'password_hash': fields.String(required=False, description='user password hash'),
     }
 
     user_post = user.copy()
-    user_post.pop('id', None)
-    user_post.update({
-        'password': fields.String(required=True, description='user password'),
-    })
+    user_post.pop("id", None)
+    user_post.update(
+        {
+            "password": fields.String(required=True, description="user password"),
+        }
+    )
 
     user_put = user_post.copy()
-    user_put.pop('username', None)
-    user_put.pop('password', None)
+    user_put.pop("username", None)
+    user_put.pop("password", None)
